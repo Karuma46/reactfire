@@ -2,8 +2,11 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
-const Addtask = () => {
-  const [task, setTask] = useState({});
+const Addtask = ({getTasks}) => {
+  const [task, setTask] = useState({
+    name: '',
+    is_done: false
+  });
 
   const handleTask = (e) => {
     setTask({
@@ -12,14 +15,14 @@ const Addtask = () => {
     });
   };
 
-  const sendTask = async (e) => {
+  const sendTask = (e) => {
     e.preventDefault();
-    try {
-      await addDoc(collection(db, "tasks"), { ...task });
-      setTask({});
-    } catch (e) {
-      console.log(e.message);
-    }
+    addDoc(collection(db, "tasks"), { ...task })
+    .then(() => {
+      setTask({name: '', is_done: false});
+      getTasks()
+    })
+  
   };
 
   return (

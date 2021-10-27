@@ -6,21 +6,15 @@ import Task from "./components/task";
 
 const Todos = () => {
   const [tasks, setTasks] = useState([]);
-
+  const getTasks = async () => {
+    try {
+      const query = await getDocs(collection(db, "tasks"));
+      setTasks(query.docs.map(doc => ({...doc.data(), id: doc.id})))
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const query = await getDocs(collection(db, "tasks"));
-        query.forEach((doc) => {
-          let list = [...tasks];
-          list.push({ ...doc.data() });
-          setTasks(list);
-        });
-      } catch (e) {
-        console.log(e.message);
-      }
-    };
-
     getTasks();
   }, []);
 
@@ -29,10 +23,10 @@ const Todos = () => {
       <div>
         <div className="tasks">
           {tasks.map((task) => (
-            <Task task={task} />
+            <Task key={task.id} task={task} getTasks={getTasks} />
           ))}
         </div>
-        <Addtask />
+        <Addtask getTasks={getTasks} />
       </div>
     </>
   );
