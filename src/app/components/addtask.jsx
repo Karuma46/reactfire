@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import Api from "../firebase/api"
 
 const Addtask = ({getTasks}) => {
   const [task, setTask] = useState({
@@ -17,7 +16,7 @@ const Addtask = ({getTasks}) => {
 
   const sendTask = (e) => {
     e.preventDefault();
-    addDoc(collection(db, "tasks"), { ...task })
+    Api.post('tasks', task)
     .then(() => {
       setTask({name: '', is_done: false});
       getTasks()

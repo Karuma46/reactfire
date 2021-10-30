@@ -1,17 +1,16 @@
-import {doc, deleteDoc, updateDoc} from 'firebase/firestore'
-import { db } from "../../firebase";
+import Api from '../firebase/api'
 
 const Task = ({ task, getTasks }) => {
 
   const deleteTask = () => {
-    deleteDoc(doc(db, 'tasks', task.id))
+    Api.delete('tasks', task.id)
     .then(() =>{
       getTasks()
     })
   }
   
   const markDone = () => {
-    updateDoc(doc(db, 'tasks', task.id), {is_done: true})
+    Api.update('tasks', task.id, {is_done: true})
     .then(() => {
       getTasks()
     })
