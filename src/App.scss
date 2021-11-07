@@ -1,8 +1,14 @@
 @import "./app/styles/main";
+@import "../node_modules/bootstrap/scss/bootstrap-grid.scss";
+@import "../node_modules/bootstrap/scss/bootstrap-utilities.scss";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.scss";
 
 body,
 html {
   margin: 0px;
-  padding: 0px;
+  padding: 0px 0px;
 }
 
+body {
+  padding: 30px 0px;
+}
