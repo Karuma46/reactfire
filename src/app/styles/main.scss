@@ -1,5 +1,7 @@
+@import "./color";
 @import "./layout";
 @import "./task";
+@import "./header";
 
 h1,
 h2,
@@ -8,17 +10,23 @@ h4,
 h5,
 p,
 a,
+i,
 li {
   font-family: "Source Sans Pro", sans-serif;
   margin: 0px;
+  color: $white;
 }
 
-header {
+body {
+  background: $darkBlue;
+}
+
+.App {
   width: 100%;
-  text-align: center;
-  padding: 50px 0px;
-  h1 {
-    font-weight: 200;
-  }
-  background-color: #f1f1f1;
+  max-width: 1200px;
+  margin: 0px auto;
+}
+
+.rb {
+  border-radius: 25px;
 }
