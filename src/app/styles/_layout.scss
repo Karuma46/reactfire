@@ -1,0 +1,18 @@
+#content {
+  width: 100%;
+  max-width: 800px;
+  margin: 0px auto;
+  display: flex;
+  flex-direction: row;
+  #lists {
+    width: 37.5%;
+    max-width: 300px;
+    border-right: 1px solid #707070;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  #tasks {
+    padding: 20px;
+    box-sizing: border-box;
+  }
+}
