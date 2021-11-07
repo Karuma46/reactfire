@@ -1,21 +1,25 @@
-import {addDoc, collection, deleteDoc, doc, getDocs, updateDoc} from "@firebase/firestore"
+import {addDoc, collection, deleteDoc, doc, getDocs, updateDoc, query, where} from "@firebase/firestore"
 import {db} from "./config"
 
 class Api{
-  get = (params) => {
-    return getDocs(collection(db, params))
+  get = (col) => {
+    return getDocs(collection(db, col))
   }
 
-  post = (params, obj) => {
-    return addDoc(collection(db, params), {...obj})
+  query = (col, params) => {
+    return getDocs(query(collection(db, col), where(params[0], params[1], params[2])))
   }
 
-  update = (params, id, obj) =>{
-    return updateDoc(doc(db, params, id), {...obj})
+  post = (col, obj) => {
+    return addDoc(collection(db, col), {...obj})
   }
 
-  delete = (params, id) => {
-    return deleteDoc(doc(db, params, id))
+  update = (col, id, obj) =>{
+    return updateDoc(doc(db, col, id), {...obj})
+  }
+
+  delete = (col, id) => {
+    return deleteDoc(doc(db, col, id))
   }
 }
 
