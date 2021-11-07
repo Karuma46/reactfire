@@ -6,6 +6,7 @@ import { ListContext } from 'app/context/ListsContext'
 const Lists = () => {
   const {lists, setLists} = useContext(ListContext)
   const [newList, setNewList] = useState({name: ''})
+  const [addListInput, setAddListInput] = useState(false)
 
   const handleInput = (e) => {
     setNewList({name: e.target.value})
@@ -35,6 +36,11 @@ const Lists = () => {
     })
   }
 
+  const toggleAddListInput = () => {
+    setNewList('')
+    setAddListInput(!addListInput);
+  }
+
   useEffect(() => {
     getLists()
   },[])
@@ -42,24 +48,48 @@ const Lists = () => {
   return(
     <>
       <span>
-        <Link to="/lists">Lists</Link>
+        <i className="bi-ui-checks"></i>
+        <Link to="/lists">&nbsp; Lists</Link>
       </span>
       <ul>
         {
           lists.map(list=>(
             <Link to={`/lists/${list.id}`} key={list.id}>
-              <li>{list.name}</li>
+              <li> <i className="bi-square-fill"> &nbsp; </i> {list.name}</li>
             </Link>
           ))
         }
+        {
+          addListInput ? (
+            <li id="addListInput">
+              <div>
+                <form onSubmit={postNewList}>
+                  <div className="inputGroup d-flex justify-content-between align-items-center">
+                    <input type="text" value={newList.name} onChange={handleInput} placeholder="List Name" />
+                    <div className="inputActions"> 
+                      <span>
+                        <i className="bi-check"></i>
+                      </span>
+                      <span onClick={toggleAddListInput}>
+                        <i className="bi-x"></i>
+                      </span>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+          ): (
+            ''
+          )
+        }
+
+        <li id="addListBtn" onClick={toggleAddListInput}>
+          <i className="bi-plus-circle"></i> &nbsp;
+          Add New List
+        </li>
       </ul>
 
-      <div>
-        <form onSubmit={postNewList}>
-          <input type="text" value={newList.name} onChange={handleInput} />
-          <button>Add List</button>
-        </form>
-      </div>
+     
     </>
   )
 }

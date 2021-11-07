@@ -1,0 +1,22 @@
+#sidebar {
+  width: 350px;
+  height: auto;
+  min-height: 500px;
+  background-color: $navyBlue;
+  .sidebarLink {
+    padding: 8px 0px;
+    font-size: 20px;
+    a {
+      text-decoration: none;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 10px;
+      font-size: 16px;
+      li {
+        padding: 10px 0px;
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+.inputGroup {
+  border-bottom: 1px solid $white;
+  input {
+    background: none;
+    color: $white;
+    border: none;
+    &:focus {
+      border: none;
+      outline: none;
+    }
+  }
+  .inputActions {
+    cursor: pointer;
+  }
+}
+
+#addListBtn {
+  cursor: pointer;
+}
