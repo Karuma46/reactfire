@@ -1,4 +1,4 @@
-import Api from '../firebase/api'
+import Api from '../../firebase/api'
 
 const Task = ({ task, getTasks }) => {
 

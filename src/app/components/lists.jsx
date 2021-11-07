@@ -41,10 +41,13 @@ const Lists = () => {
 
   return(
     <>
+      <span>
+        <Link to="/lists">Lists</Link>
+      </span>
       <ul>
         {
           lists.map(list=>(
-            <Link to={`/list/${list.id}`} key={list.id}>
+            <Link to={`/lists/${list.id}`} key={list.id}>
               <li>{list.name}</li>
             </Link>
           ))

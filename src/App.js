@@ -1,26 +1,22 @@
 import {BrowserRouter as Router, Route} from "react-router-dom"
 import "./App.scss";
-import Todos from "app/components/todo";
-import Lists from "app/components/lists";
+import Sidebar from "app/components/sidebar";
 import { ListProvider } from "app/context/ListsContext";
+import Header from "app/components/header";
+import Dashboard from "app/pages/dashboard";
+import List from "app/pages/tasks";
 
 function App() {
   return (
     <div className="App">
-      <header>
-        <h1>React x Firebase</h1>
-        <h3>To do App</h3>
-      </header>
+      <Header />
       <Router>
         <div id="content">
           <ListProvider>
-            <div id="lists">
-              <Lists/>
-            </div>
+            <Sidebar/>
             <div id="tasks">
-              <Route path="/list/:id/" render={() => (
-                <Todos />
-              )} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/lists/:id/" component={List} />
             </div>
           </ListProvider>
         </div>

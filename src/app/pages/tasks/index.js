@@ -1,12 +1,12 @@
 import {doc} from "@firebase/firestore";
 import { db } from "app/firebase/config";
 import { useState, useEffect } from "react";
-import {useParams, Route} from "react-router-dom";
-import Api from "../firebase/api"
+import {useParams} from "react-router-dom";
+import Api from "app/firebase/api"
 import Addtask from "./addtask";
 import Task from "./task";
 
-const Todos = () => {
+const List = () => {
   const [tasks, setTasks] = useState([]);
   const {id} = useParams();
 
@@ -38,4 +38,4 @@ const Todos = () => {
   );
 };
 
-export default Todos;
+export default List;
