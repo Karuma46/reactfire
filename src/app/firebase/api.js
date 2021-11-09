@@ -1,11 +1,15 @@
-import {addDoc, collection, deleteDoc, doc, getDocs, updateDoc, query, where} from "@firebase/firestore"
+import {addDoc, collection, deleteDoc, doc, getDocs, getDoc, updateDoc, query, where} from "@firebase/firestore"
 import {db} from "./config"
 
 class Api{
-  get = (col) => {
-    return getDocs(collection(db, col))
+  get = (col, id) => {
+    if(id){
+      return getDoc(doc(db, col, id))
+    } else {
+      return getDocs(collection(db, col))
+    }
   }
-
+  
   query = (col, params) => {
     return getDocs(query(collection(db, col), where(params[0], params[1], params[2])))
   }
