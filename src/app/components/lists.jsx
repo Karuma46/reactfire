@@ -4,23 +4,12 @@ import { useContext, useEffect, useState } from 'react'
 import { ListContext } from 'app/context/ListsContext'
 
 const Lists = () => {
-  const {lists, setLists} = useContext(ListContext)
+  const {lists, getLists} = useContext(ListContext)
   const [newList, setNewList] = useState({name: ''})
   const [addListInput, setAddListInput] = useState(false)
 
   const handleInput = (e) => {
     setNewList({name: e.target.value})
-  }
-
-  const getLists = () => {
-    Api.get('lists')
-    .then(res => {
-      setLists(res.docs.map(doc => ({...doc.data(), id: doc.id})));
-      
-    })
-    .catch(e => {
-      console.log(e.message)
-    })
   }
 
   const postNewList = (e) => {
@@ -29,6 +18,7 @@ const Lists = () => {
     .then(res => {
       console.log(res);
       setNewList({name: ''})
+      setAddListInput(false)
       getLists()
     })
     .catch(e => {
@@ -67,7 +57,7 @@ const Lists = () => {
                   <div className="inputGroup d-flex justify-content-between align-items-center">
                     <input type="text" value={newList.name} onChange={handleInput} placeholder="List Name" />
                     <div className="inputActions"> 
-                      <span>
+                      <span onClick={postNewList}>
                         <i className="bi-check"></i>
                       </span>
                       <span onClick={toggleAddListInput}>
