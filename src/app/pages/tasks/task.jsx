@@ -9,8 +9,8 @@ const Task = ({ task, getTasks }) => {
     })
   }
   
-  const markDone = () => {
-    Api.update('tasks', task.id, {is_done: true})
+  const toggleDone = () => {
+    Api.update('tasks', task.id, {is_done: !task.is_done})
     .then(() => {
       getTasks()
     })
@@ -18,18 +18,22 @@ const Task = ({ task, getTasks }) => {
 
   return (
     <>
-      <div className="task">
-        {task.name}
-        <span>
-        </span>
-          &nbsp;{ task.is_done ? 'd' : 'n'  }
-        <span>
-          <button onClick={deleteTask}>Delete</button>
-        </span>
-        &nbsp;
-        <span>
-          <button onClick={markDone}>Done</button>
-        </span>
+      <div className="task rb d-flex align-items-center justify-content-start">
+        <div onClick={toggleDone}>
+          { task.is_done ? <i className="bi-check-square-fill"></i> : <i className="bi-square"></i>  }
+        </div>
+        <div className="taskName">
+          {task.name}
+        </div>
+        <div>
+          <span onClick={deleteTask}>
+            <i className="bi-trash"></i>
+          </span>
+          &nbsp;
+          <span>
+            <i className="bi-pencil-square"></i>
+          </span>
+        </div>
       </div>
     </>
   );

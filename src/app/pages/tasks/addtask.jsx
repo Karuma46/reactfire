@@ -32,10 +32,18 @@ const Addtask = ({getTasks}) => {
 
   return (
     <>
-      <form onSubmit={sendTask}>
-        <input type="text" onChange={handleTask} value={task.name} />
-        <input type="datetime-local" onChange={handleDateTime} value={task.deadline} />
-        <button>Add Task</button>
+      <form id="addTaskForm" onSubmit={sendTask} className="d-flex justify-content-between align-items-center">
+        <div>
+          <input type="text" onChange={handleTask} value={task.name} placeholder="Add a task" />
+          {/* <label htmlFor="datetimeinput" className="mt-3 d-block">
+            <i className="bi-calendar2-week-fill"></i>
+          </label> */}
+          <br />
+          <input id="datetimeinput" type="datetime-local" onChange={handleDateTime} value={task.deadline} />
+        </div>
+        <button>
+          <i className="bi-plus-circle"></i>
+        </button>
       </form>
     </>
   );

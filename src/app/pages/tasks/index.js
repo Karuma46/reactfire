@@ -1,38 +1,98 @@
 import {doc} from "@firebase/firestore";
 import { db } from "app/firebase/config";
-import { useState, useEffect } from "react";
-import {useParams} from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import {useParams, useHistory} from "react-router-dom";
 import Api from "app/firebase/api"
 import Addtask from "./addtask";
 import Task from "./task";
+import { ListContext } from 'app/context/ListsContext'
 
 const List = () => {
   const [tasks, setTasks] = useState([]);
+  const [list, setList] = useState({})
+  const [listEditMode, setListEditMode] = useState(false)
   const {id} = useParams();
+  const history = useHistory();
+  const {getLists} = useContext(ListContext)
 
   const getTasks = async () => {
     var docRef = doc(db, 'lists', id)
     Api.query('tasks', ['listid', '==', docRef])
     .then(res => {
-      setTasks(res.docs.map(doc => ({...doc.data(), id:doc.id})))
+      setTasks(res.docs.map(doc => ({...doc.data(), id:doc.id})));
     })
     .catch(e => {
       console.log(e.message)
     })
   };
+
+  const deleteList = () => {
+    Api.delete('lists', id)
+    .then(() => {
+      getLists()
+      history.push('/dashboard')
+    })
+  }
+
+  const updateList = () => {
+    Api.update('lists', id, {name: list.name})
+    .then(() => {
+      getLists()
+      setListEditMode(false)
+    })
+  }
+
+  const getList = () => {
+    Api.get('lists', id)
+    .then(res => {
+      setList({...res.data(), id:res.id})
+    })
+  }
+
   useEffect(() => {
     getTasks();
+    getList();
   }, [id]);
 
   return (
     <>
       <div>
-        <div className="tasks">
+        <div className="my-4 d-flex justify-content-between">
+          {
+            listEditMode ? (
+              <div className="inputGroup d-flex justify-content-between align-items-center">
+                <input type="text" value={list.name} onChange={(e) => setList({...list, name:e.target.value})} />
+                <div className="inputActions"> 
+                  <span onClick={updateList}>
+                    <i className="bi-check"></i>
+                  </span>
+                  <span onClick={() => setListEditMode(false)}>
+                    <i className="bi-x"></i>
+                  </span>
+                </div>
+              </div>
+            ): (
+              <h2> {list.name} </h2>
+            )
+          }
+          <div className="">
+            <span className="mx-2" onClick={() => setListEditMode(true)}>
+              <i className="bi-pencil-fill"></i>
+            </span>
+            <span className="mx-2">
+              <i className="bi-archive-fill"></i>
+            </span>
+            <span className="mx-2" onClick={deleteList}>
+              <i className="bi-trash"></i>
+            </span>
+          </div>
+        </div>
+        <Addtask getTasks={getTasks} />
+        <div className="tasks mt-4">
         {tasks.map((task) => (
           <Task key={task.id} task={task} getTasks={getTasks} />
           ))}
         </div>
-        <Addtask getTasks={getTasks} />
       </div>
     </>
   );
