@@ -39,7 +39,7 @@ const Addtask = ({getTasks}) => {
             <i className="bi-calendar2-week-fill"></i>
           </label> */}
           <br />
-          <input id="datetimeinput" type="datetime-local" onChange={handleDateTime} value={task.deadline} />
+          {/* <input id="datetimeinput" type="datetime-local" onChange={handleDateTime} value={task.deadline} /> */}
         </div>
         <button>
           <i className="bi-plus-circle"></i>

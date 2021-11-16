@@ -6,6 +6,7 @@ import Api from "app/firebase/api"
 import Addtask from "./addtask";
 import Task from "./task";
 import { ListContext } from 'app/context/ListsContext'
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton"
 
 const List = () => {
   const [tasks, setTasks] = useState([]);
@@ -14,15 +15,19 @@ const List = () => {
   const {id} = useParams();
   const history = useHistory();
   const {getLists} = useContext(ListContext)
+  const [loading, setLoading] = useState(true)
 
   const getTasks = async () => {
+    setLoading(true)
     var docRef = doc(db, 'lists', id)
     Api.query('tasks', ['listid', '==', docRef])
     .then(res => {
       setTasks(res.docs.map(doc => ({...doc.data(), id:doc.id})));
+      setLoading(false)
     })
     .catch(e => {
       console.log(e.message)
+      setLoading(false)
     })
   };
 
@@ -87,12 +92,20 @@ const List = () => {
             </span>
           </div>
         </div>
-        <Addtask getTasks={getTasks} />
-        <div className="tasks mt-4">
-        {tasks.map((task) => (
-          <Task key={task.id} task={task} getTasks={getTasks} />
-          ))}
+        <div className="tasks mt-4 mb-4">
+        {
+          loading ? (
+            <SkeletonTheme baseColor="#181820" highlightColor="#272732">
+              <Skeleton count={2} height={70} borderRadius={20} />
+            </SkeletonTheme>
+          ) : (
+            tasks.map((task) => (
+              <Task key={task.id} task={task} getTasks={getTasks} />
+            ))
+          )
+        }
         </div>
+        <Addtask getTasks={getTasks} />
       </div>
     </>
   );
