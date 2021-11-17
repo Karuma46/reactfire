@@ -1,20 +1,17 @@
 import {doc} from "@firebase/firestore";
 import { db } from "app/firebase/config";
-import { useState, useEffect, useContext } from "react";
-import {useParams, useHistory} from "react-router-dom";
+import { useState, useEffect,} from "react";
+import {useParams} from "react-router-dom";
 import Api from "app/firebase/api"
 import Addtask from "./addtask";
 import Task from "./task";
-import { ListContext } from 'app/context/ListsContext'
+
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton"
+import ListOptions from "./listOptions";
 
 const List = () => {
   const [tasks, setTasks] = useState([]);
-  const [list, setList] = useState({})
-  const [listEditMode, setListEditMode] = useState(false)
   const {id} = useParams();
-  const history = useHistory();
-  const {getLists} = useContext(ListContext)
   const [loading, setLoading] = useState(true)
 
   const getTasks = async () => {
@@ -27,81 +24,38 @@ const List = () => {
     })
     .catch(e => {
       console.log(e.message)
-      setLoading(false)
+      setLoading('failed')
     })
   };
 
-  const deleteList = () => {
-    Api.delete('lists', id)
-    .then(() => {
-      getLists()
-      history.push('/dashboard')
-    })
-  }
-
-  const updateList = () => {
-    Api.update('lists', id, {name: list.name})
-    .then(() => {
-      getLists()
-      setListEditMode(false)
-    })
-  }
-
-  const getList = () => {
-    Api.get('lists', id)
-    .then(res => {
-      setList({...res.data(), id:res.id})
-    })
-  }
 
   useEffect(() => {
     getTasks();
-    getList();
   }, [id]);
 
   return (
     <>
       <div>
-        <div className="my-4 d-flex justify-content-between">
-          {
-            listEditMode ? (
-              <div className="inputGroup d-flex justify-content-between align-items-center">
-                <input type="text" value={list.name} onChange={(e) => setList({...list, name:e.target.value})} />
-                <div className="inputActions"> 
-                  <span onClick={updateList}>
-                    <i className="bi-check"></i>
-                  </span>
-                  <span onClick={() => setListEditMode(false)}>
-                    <i className="bi-x"></i>
-                  </span>
-                </div>
-              </div>
-            ): (
-              <h2> {list.name} </h2>
-            )
-          }
-          <div className="">
-            <span className="mx-2" onClick={() => setListEditMode(true)}>
-              <i className="bi-pencil-fill"></i>
-            </span>
-            <span className="mx-2">
-              <i className="bi-archive-fill"></i>
-            </span>
-            <span className="mx-2" onClick={deleteList}>
-              <i className="bi-trash"></i>
-            </span>
-          </div>
-        </div>
+        <ListOptions />
         <div className="tasks mt-4 mb-4">
         {
-          loading ? (
+          loading === true ? (
             <SkeletonTheme baseColor="#181820" highlightColor="#272732">
               <Skeleton count={2} height={70} borderRadius={20} />
             </SkeletonTheme>
           ) : (
-            tasks.map((task) => (
-              <Task key={task.id} task={task} getTasks={getTasks} />
-            ))
+            loading === 'failed' ? (
+              <div className="text-center">
+                <span onClick={() => getTasks()}>
+                  <i className="bi-arrow-clockwise"></i>
+                  <p>Reload</p>
+                </span>
+              </div>
+            ) : (
+              tasks.map((task) => (
+                <Task key={task.id} task={task} getTasks={getTasks} />
+              ))
+            )
           )
         }
         </div>
