@@ -17,3 +17,34 @@
 #addListBtn {
   cursor: pointer;
 }
+
+form {
+  width: 500px;
+  margin: 0px auto;
+  padding: 50px 0px;
+  border-top: 1px solid $lightGrey;
+  border-bottom: 1px solid $lightGrey;
+  input {
+    background-color: $navyBlue;
+    border: none;
+    border-radius: 10px;
+    height: 50px;
+    color: white;
+    padding: 0px 10px;
+    display: block;
+    margin: 20px 0px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: $navyBlue;
+    border: none;
+    border-radius: 50px;
+    height: 50px;
+    color: white;
+    width: 100%;
+    font-weight: bold;
+    margin: 10px auto;
+  }
+}
