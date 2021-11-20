@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import {BrowserRouter as Router, Route, Redirect, Switch} from "react-router-dom"
+import {BrowserRouter as Router, Route, Redirect} from "react-router-dom"
 import "./App.scss";
 import Sidebar from "app/components/sidebar";
 import { ListProvider } from "app/context/ListsContext";
-import { AuthProvider, AuthContext } from "app/context/authContext";
+import { AuthContext } from "app/context/authContext";
 import Header from "app/components/header";
 import Dashboard from "app/pages/dashboard";
 import List from "app/pages/tasks";
@@ -20,7 +20,7 @@ const Authed = () => {
           <Sidebar/>
           <div id="tasks">
             <Route exact path="/" component={Dashboard}/>
-            <Route path="/dashboard" component={Dashboard} />
+            <Route exact path="/dashboard" component={Dashboard} />
             <Route path="/lists/:id/" component={List} />
           </div>
         </ListProvider>
@@ -35,11 +35,12 @@ function App() {
   return (
     <div className="App">
       <Router>
+          { loggedIn === false ? <Redirect to="/auth/signin" /> : '' }
+          { loggedIn === true ? <Route path="/" component={Authed} /> : '' }
+
           <Route exact path="/auth" render={() => <Redirect to="/auth/signin" />} />
           <Route exact path="/auth/signin" component={Login} />
           <Route exact path="/auth/signup" component={Register} />
-          <Route exact path="/" component={Authed} />
-          {loggedIn ? '' : <Redirect to="/auth" />}
       </Router>
     </div>
   );

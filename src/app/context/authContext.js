@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-import {getAuth, onAuthStateChanged} from '@firebase/auth';
+import {getAuth, onAuthStateChanged, signOut} from '@firebase/auth';
+import Api from 'app/firebase/api'
 
 export const AuthContext = createContext();
 
@@ -15,16 +16,44 @@ export const AuthProvider = ({children}) => {
 
 const UseAuthProvider = () => {
   const auth = getAuth()
-  const profile = auth.currentUser
-  const [user, setUser] = useState([])
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [profile, setProfile] = useState({})
+  const [user, setUser] = useState({})
+  const [loggedIn, setLoggedIn] = useState(null)
+
+  const setCurrUser = (obj) => {
+    setUser(obj);
+    setLoggedIn(true);
+    localStorage.setItem('user', JSON.stringify(obj))
+  }
+
+  const getProfile = (id) => {
+    Api.query('users', ['uid', '==', id])
+    .then(res => {
+      setProfile({...res.docs[0].data(), id: res.docs[0].id})
+    })
+  }
+
+  const signout = () => {
+    signOut(auth)
+    .then(() => {
+      localStorage.removeItem('user');
+      setProfile({});
+    })
+  }
   
   useEffect(() => {
-    if(profile !== null){
-      setLoggedIn(true)
-    }
-    console.log(profile)
-  },[])
+    setUser(JSON.parse(localStorage.getItem('user')));
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        setLoggedIn(true);
+        setUser(user);
+        getProfile(user.uid);
+      } else {
+        setUser({});
+        setLoggedIn(false);
+      }
+    })
+  },[loggedIn])
   
-  return {user, setUser, loggedIn, setLoggedIn};
+  return {user, setCurrUser, loggedIn, signout, profile};
 }

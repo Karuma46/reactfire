@@ -1,13 +1,9 @@
 import { useContext } from 'react';
-import { AuthContext } from 'app/context/authContext';
+import {AuthContext } from 'app/context/authContext';
 import avatar from 'app/assets/img/avatar.png';
 
 const Header = () => {
-  let {setLoggedIn} = useContext(AuthContext);
-
-  const logout = () => {
-    setLoggedIn(false);
-  }
+  let {signout, profile} = useContext(AuthContext);
 
   return(
     <header className="rb px-5 d-flex align-items-center justify-content-between">
@@ -21,12 +17,12 @@ const Header = () => {
           <img src={avatar} alt="" />
         </div>
         <div id="accInfo" className="text-center">
-          <h3>Steve Karuma</h3>
+          <h3>{profile?.first_name} {profile?.last_name}</h3>
           <div id="accActions">
             <span>
               <i className="bi-gear"></i>
             </span>
-            <span onClick={logout}>
+            <span onClick={signout}>
               <i className="bi-box-arrow-right"></i>
             </span>
           </div>

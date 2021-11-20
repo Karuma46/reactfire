@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from 'app/context/authContext';
 import {Link, Redirect} from 'react-router-dom'
+import {getAuth, signInWithEmailAndPassword} from '@firebase/auth'
 
 const LoginForm = () => {
-  let {setLoggedIn} = useContext(AuthContext)
+  let {setCurrUser} = useContext(AuthContext)
   const [creds, setCreds] = useState({
     email: null,
     password: null
@@ -13,20 +14,26 @@ const LoginForm = () => {
     setCreds({...creds, [e.target.id]: e.target.value})
   }
 
-  const handleLogin = (e) => {
+  const handleLogin = (e) => {  
     e.preventDefault()
-    setLoggedIn(true)
+    const auth = getAuth()
+    signInWithEmailAndPassword(auth, creds.email, creds.password)
+    .then(res => {
+      setCurrUser(res.user);
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
   return(
     <form onSubmit={handleLogin}>
       <input type="email" value={creds.email} id="email" placeholder="Email" onChange={handleInput} />
       <input type="password" value={creds.password} id="password" placeholder="Password" onChange={handleInput} />
-      <button type="submit">Sign In</button>
+      <button type="submit" id="submitBtn">Sign In</button>
     </form>
   )
 }
-
 
 const Login = () => {
 
