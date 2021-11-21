@@ -16,9 +16,9 @@ const Addtask = ({getTasks}) => {
     setTask({...task, name: e.target.value});
   };
 
-  const handleDateTime = (e) => {
-    setTask({...task, deadline: e.target.value})
-  }
+  // const handleDateTime = (e) => {
+  //   setTask({...task, deadline: e.target.value})
+  // }
 
   const sendTask = (e) => {
     e.preventDefault();

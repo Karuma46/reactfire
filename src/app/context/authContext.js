@@ -53,7 +53,7 @@ const UseAuthProvider = () => {
         setLoggedIn(false);
       }
     })
-  },[loggedIn])
+  },[loggedIn, auth])
   
   return {user, setCurrUser, loggedIn, signout, profile};
 }
