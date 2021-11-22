@@ -27,7 +27,7 @@ const LoginForm = () => {
   }
 
   return(
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className="authform">
       <input type="email" value={creds.email} id="email" placeholder="Email" onChange={handleInput} />
       <input type="password" value={creds.password} id="password" placeholder="Password" onChange={handleInput} />
       <button type="submit" id="submitBtn">Sign In</button>
