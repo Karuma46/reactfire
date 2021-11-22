@@ -43,7 +43,7 @@ const RegisterForm = () => {
   }
 
   return(
-    <form onSubmit={handleRegister}>
+    <form onSubmit={handleRegister} className="authform">
       <input type="text" value={creds.first_name} id="first_name" placeholder="First Name" onChange={handleInput} />
       <input type="text" value={creds.last_name} id="last_name" placeholder="Last Name" onChange={handleInput} />
       <input type="email" value={creds.email} id="email" placeholder="Email" onChange={handleInput} />
