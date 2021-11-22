@@ -5,7 +5,7 @@ import {getAuth, createUserWithEmailAndPassword} from "@firebase/auth"
 import Api from 'app/firebase/api'
 
 const RegisterForm = () => {
-  let {setUser, setLoggedIn} = useContext(AuthContext)
+  let {setCurrUser} = useContext(AuthContext)
   const [creds, setCreds] = useState({
     email: null,
     password: null
@@ -25,8 +25,7 @@ const RegisterForm = () => {
 
     Api.post('users', obj)
     .then(() => {
-      setUser({...user});
-      setLoggedIn(true)
+      setCurrUser({...user});
     })
   }
 

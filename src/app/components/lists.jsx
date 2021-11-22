@@ -2,13 +2,16 @@ import { Link } from "react-router-dom";
 import Api from "app/firebase/api";
 import { useContext, useState } from "react";
 import { ListContext } from "app/context/ListsContext";
-
+import {AuthContext} from "app/context/authContext";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import {doc} from "@firebase/firestore";
+import {db} from "app/firebase/config";
 
 const Lists = () => {
   const { lists, getLists, loading } = useContext(ListContext);
   const [newList, setNewList] = useState({ name: "" });
   const [addListInput, setAddListInput] = useState(false);
+  let { profile } = useContext(AuthContext)
 
   const handleInput = (e) => {
     setNewList({ name: e.target.value });
@@ -16,7 +19,7 @@ const Lists = () => {
 
   const postNewList = (e) => {
     e.preventDefault();
-    Api.post("lists", { ...newList })
+    Api.post("lists", { ...newList, userId: doc(db, 'users', profile.id) })
       .then((res) => {
         console.log(res);
         setNewList({ name: "" });

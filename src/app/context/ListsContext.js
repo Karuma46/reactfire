@@ -1,5 +1,8 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import Api from "app/firebase/api";
+import { AuthContext } from "./authContext";
+import {db} from "app/firebase/config";
+import {doc} from "@firebase/firestore";
 
 export const ListContext = createContext();
 
@@ -11,23 +14,27 @@ export const ListProvider = ({ children }) => {
 const UseListProvider = () => {
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
+  let {profile} = useContext(AuthContext)
 
   const getLists = () => {
     setLoading(true);
-    Api.get("lists")
-      .then((res) => {
-        setLists(res.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e.message);
-        setLoading(false);
-      });
+    let userRef = doc(db, "users", profile.id);
+    Api.query("lists", ['userId', '==', userRef])
+    .then((res) => {
+      setLists(res.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setLoading(false);
+    })
+    .catch((e) => {
+      console.log(e.message);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
-    getLists();
-  }, []);
+    if(profile.id){
+      getLists();
+    }
+  }, [profile]);
 
   return { lists, setLists, getLists, loading };
 };

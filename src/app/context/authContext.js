@@ -51,6 +51,7 @@ const UseAuthProvider = () => {
       } else {
         setUser({});
         setLoggedIn(false);
+        localStorage.removeItem('user');
       }
     })
   },[loggedIn, auth])
